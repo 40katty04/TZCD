@@ -29,7 +29,6 @@ services:
       - "33062:3306"
     environment:
       - MYSQL_DATABASE=laravel
-      - MYSQL_USER=root
       - MYSQL_ROOT_PASSWORD=secret1234
 
   phpmyadmin:
