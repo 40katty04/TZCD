@@ -1,0 +1,47 @@
+version: '3'
+
+volumes:
+  vol-mysql:
+    driver: local
+
+services:
+  web:
+    container_name: web-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    tty: true
+    volumes:
+      - ./:/var/www:delegated
+      - ./docker/nginx_default.conf:/etc/nginx/sites-enabled/default:delegated
+    depends_on:
+      - mysql
+    external_links:
+      - mysql:mysql-app
+  mysql:
+    container_name: mysql-app
+    image: mysql:8.0
+    volumes:
+      - vol-mysql:/var/lib/mysql:rw
+    ports:
+      - "33062:3306"
+    environment:
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=secret1234
+
+  phpmyadmin:
+    container_name: phpmyadmin-app
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mysql
+    external_links:
+      - mysql:mysql-app
+    ports:
+      - "9191:81"
+    environment:
+      - MYSQL_USER= root
+      - MYSQL_ROOT_PASSWORD= secret1234
+      - PMA_HOST= mysql
