@@ -12,10 +12,10 @@
                             @csrf
 
                             <div class="form-group row">
-                                <label for="url" class="col-md-4 col-form-label text-md-right">{{ __('Token') }}</label>
+                                <label for="url" class="col-md-4 col-form-label text-md-right">{{ __('URL') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="token" type="text" class="form-control" name="token" value="{{ $token }}" readonly>
+                                    <input id="url" type="text" class="form-control" name="url" required="required">
                                 </div>
                             </div>
 
@@ -49,6 +49,18 @@
                             <button type="submit" class="btn btn-primary mb-2">Save</button>
                         </form>
                     </div>
+                    @if(session('link'))
+                        <div class="card-footer">
+                            <div class="link-container row">
+                                <div class="col-md-3">
+                                    Your Link
+                                </div>
+                                <div class="col-md-6 link-info">
+                                    <a href={{ session('link') }}>{{ session('link') }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

@@ -16,21 +16,22 @@ class LinkController extends Controller
 {
     public function create(): View
     {
-        $token = Link::generateToken();
-        return view('link.create', ['token'=> $token]);
+        return view('link.create');
     }
 
     public function store(CreateLinkRequest $request): RedirectResponse
     {
         $expiresAt = $request->input('expires_in') ?  Carbon::now()->addMinutes($request->input('expires_in'))->toDateTime() : null;
+        $token = Link::generateToken();
 
-        Link::create([
-            'token' => $request->input('token'),
+        $link = Link::create([
+            'url' => $request->input('url'),
+            'token' => $token,
             'max_clicks' => $request->input('max_clicks', 0),
             'expires_at' => $expiresAt,
         ]);
 
-        return redirect()->route('link.create');
+        return redirect()->route('link.create')->with('link', url($link->token));
     }
 
     public function show(string $token, Request $request): RedirectResponse
@@ -43,7 +44,7 @@ class LinkController extends Controller
 
         $link->incrementClicks();
 
-        return redirect()->route('link.create');
+        return redirect()->away($link->url);
     }
 
 }

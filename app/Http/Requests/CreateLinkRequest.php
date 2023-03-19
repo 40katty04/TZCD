@@ -26,6 +26,10 @@ class CreateLinkRequest extends FormRequest
      */
     public function rules()
     {
-        return Link::$rules;
+        return [
+            'url' => 'required|string',
+            'max_clicks' => 'integer|between:0,999999',
+            'expires_in' => 'integer|between:0,1440'
+        ];;
     }
 }

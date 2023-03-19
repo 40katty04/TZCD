@@ -40,6 +40,7 @@ WORKDIR /var/www
 
 # set polices
 RUN chown -R www-data:www-data /var/www/
+RUN chmod 775 -R /var/www/
 
 CMD service php8.1-fpm start ; cp .env.example .env; composer install; php artisan key:generate; nginx -g 'daemon off;' ;
 

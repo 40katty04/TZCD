@@ -30,17 +30,3 @@ services:
     environment:
       - MYSQL_DATABASE=laravel
       - MYSQL_ROOT_PASSWORD=secret1234
-
-  phpmyadmin:
-    container_name: phpmyadmin-app
-    image: phpmyadmin/phpmyadmin
-    depends_on:
-      - mysql
-    external_links:
-      - mysql:mysql-app
-    ports:
-      - "9191:81"
-    environment:
-      - MYSQL_USER= root
-      - MYSQL_ROOT_PASSWORD= secret1234
-      - PMA_HOST= mysql

@@ -13,6 +13,7 @@ class Link extends Model
     use HasFactory;
 
     protected $fillable = [
+        'url',
         'token',
         'max_clicks',
         'clicks',
@@ -20,6 +21,7 @@ class Link extends Model
     ];
 
     protected $casts = [
+        'url' => 'string',
         'token' => 'string',
         'max_clicks' => 'integer',
         'clicks' => 'integer',
@@ -28,18 +30,17 @@ class Link extends Model
 
 
     public static $rules = [
-        'token' => [
-            'required',
-            'string',
-            'size:8',                  // must be at 8 characters in length
-            'regex:/[a-z]/',           // must contain at least one lowercase letter
-            'regex:/[A-Z]/',           // must contain at least one uppercase letter
-            'regex:/[0-9]/',         // must contain at least one digit
-            'unique:links,token'
-        ],
-        'max_clicks' => ['integer', 'between:0,999999'],
-        'expires_at' => ['date'],
+        'url' => 'required|string',
+        'max_clicks' => 'integer|between:0,999999',
+        'expires_at' => 'date',
        ];
+
+    protected function url(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => (str_starts_with($value, 'https://')) ? $value : 'https://' . $value
+        );
+    }
 
     public function isExpired(): bool
     {
@@ -60,10 +61,10 @@ class Link extends Model
     public static function generateToken(){
         $token = Str::random(8);
 
-     /*   if (self::query()->where(['token' => $token])->count() > 0){
+       if (self::query()->where(['token' => $token])->count() > 0){
 
             $token = self::generateToken();
-        }*/
+        }
 
         return $token;
     }

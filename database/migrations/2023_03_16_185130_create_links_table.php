@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('links', function (Blueprint $table) {
             $table->id();
+            $table->string('url');
             $table->string('token')->unique();
             $table->integer('max_clicks')->default(0);
             $table->integer('clicks')->default(0);
