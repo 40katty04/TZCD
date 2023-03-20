@@ -58,7 +58,8 @@ class Link extends Model
         $this->save();
     }
 
-    public static function generateToken(){
+    public static function generateToken(): string
+    {
         $token = Str::random(8);
 
        if (self::query()->where(['token' => $token])->count() > 0){
